@@ -1,0 +1,30 @@
+# Maven build output
+target/
+*.class
+*.jar
+
+# IDE files
+.idea/
+*.iml
+.eclipse/
+.settings/
+.project
+.classpath
+*.iws
+*.ipr
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment variable files – never commit secrets
+.env
+.env.*
+
+# Flink checkpoint / savepoint dirs (local)
+checkpoints/
+savepoints/

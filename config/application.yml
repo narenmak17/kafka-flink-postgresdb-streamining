@@ -1,0 +1,32 @@
+# ============================================================
+# Root-level config/application.yml
+# ============================================================
+# This file is for reference only.
+# The actual config read at runtime is:
+#   src/main/resources/application.yml
+#
+# To override any value, set the corresponding environment
+# variable (see comments below) before running the job.
+# ============================================================
+
+app:
+  kafka:
+    bootstrap-servers: localhost:9092          # env: KAFKA_BOOTSTRAP_SERVERS
+    transactions-topic: customer.transactions  # env: KAFKA_TRANSACTIONS_TOPIC
+    group-id: flink-loan-eligibility-group     # env: KAFKA_GROUP_ID
+    security-protocol: PLAINTEXT               # env: KAFKA_SECURITY_PROTOCOL
+    sasl-mechanism: ""                         # env: KAFKA_SASL_MECHANISM
+    sasl-jaas-config: ""                       # env: KAFKA_SASL_JAAS_CONFIG
+
+  postgres:
+    url: jdbc:postgresql://localhost:5432/loan_db  # env: POSTGRES_URL
+    username: flink                                # env: POSTGRES_USERNAME
+    password: flink                                # env: POSTGRES_PASSWORD
+    table-name: loan_eligibility                   # env: POSTGRES_TABLE
+
+  rules:
+    threshold-amount: 500.0        # env: RULE_THRESHOLD_AMOUNT
+    currency: GBP                  # env: RULE_CURRENCY
+    required-transaction-status: APPROVED  # env: RULE_REQUIRED_TRANSACTION_STATUS
+    required-account-status: ACTIVE        # env: RULE_REQUIRED_ACCOUNT_STATUS
+    loan-rule-version: v1                  # env: LOAN_RULE_VERSION
