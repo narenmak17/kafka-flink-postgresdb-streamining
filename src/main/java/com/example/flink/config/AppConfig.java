@@ -35,6 +35,7 @@ public class AppConfig implements Serializable {
     private final String kafkaSecurityProtocol;
     private final String kafkaSaslMechanism;
     private final String kafkaSaslJaasConfig;
+    private final String kafkaRulesTopic;
 
     // -------------------- PostgreSQL --------------------
     private final String postgresUrl;
@@ -48,6 +49,15 @@ public class AppConfig implements Serializable {
     private final String ruleRequiredTransactionStatus;
     private final String ruleRequiredAccountStatus;
     private final String loanRuleVersion;
+
+    private static double parseDoubleSafe(String value, double defaultValue) {
+    try {
+        return Double.parseDouble(value);
+    } catch (Exception e) {
+        LOG.warn("Invalid numeric value '{}', using default {}", value, defaultValue);
+        return defaultValue;
+    }
+}
 
     @SuppressWarnings("unchecked")
     public AppConfig() {
@@ -64,7 +74,7 @@ public class AppConfig implements Serializable {
         kafkaSecurityProtocol   = resolve("KAFKA_SECURITY_PROTOCOL",   kafka, "security-protocol",           "PLAINTEXT");
         kafkaSaslMechanism      = resolve("KAFKA_SASL_MECHANISM",      kafka, "sasl-mechanism",              "");
         kafkaSaslJaasConfig     = resolve("KAFKA_SASL_JAAS_CONFIG",    kafka, "sasl-jaas-config",            "");
-
+        kafkaRulesTopic = resolve("KAFKA_RULES_TOPIC", kafka, "rules-topic", "mortgage.loan.rules");
         // PostgreSQL
         postgresUrl      = resolve("POSTGRES_URL",      pg, "url",       "jdbc:postgresql://localhost:5432/loan_db");
         postgresUsername = resolve("POSTGRES_USERNAME", pg, "username",  "flink");
@@ -73,7 +83,7 @@ public class AppConfig implements Serializable {
 
         // Rules
         String thresholdStr = resolve("RULE_THRESHOLD_AMOUNT", rules, "threshold-amount", "500.0");
-        ruleThresholdAmount              = Double.parseDouble(thresholdStr);
+        ruleThresholdAmount = parseDoubleSafe(thresholdStr, 500.0);
         ruleCurrency                     = resolve("RULE_CURRENCY",                       rules, "currency",                       "GBP");
         ruleRequiredTransactionStatus    = resolve("RULE_REQUIRED_TRANSACTION_STATUS",    rules, "required-transaction-status",    "APPROVED");
         ruleRequiredAccountStatus        = resolve("RULE_REQUIRED_ACCOUNT_STATUS",        rules, "required-account-status",        "ACTIVE");
@@ -131,6 +141,7 @@ public class AppConfig implements Serializable {
         return defaultValue;
     }
 
+
     // ----------------------------------------------------------------
     //  Public accessors
     // ----------------------------------------------------------------
@@ -152,4 +163,5 @@ public class AppConfig implements Serializable {
     public String getRuleRequiredTransactionStatus(){ return ruleRequiredTransactionStatus; }
     public String getRuleRequiredAccountStatus()    { return ruleRequiredAccountStatus; }
     public String getLoanRuleVersion()              { return loanRuleVersion; }
+    public String getKafkaRulesTopic() { return kafkaRulesTopic; }
 }

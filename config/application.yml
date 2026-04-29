@@ -11,12 +11,13 @@
 
 app:
   kafka:
-    bootstrap-servers: localhost:9092          # env: KAFKA_BOOTSTRAP_SERVERS
-    transactions-topic: customer.transactions  # env: KAFKA_TRANSACTIONS_TOPIC
-    group-id: flink-loan-eligibility-group     # env: KAFKA_GROUP_ID
-    security-protocol: PLAINTEXT               # env: KAFKA_SECURITY_PROTOCOL
-    sasl-mechanism: ""                         # env: KAFKA_SASL_MECHANISM
-    sasl-jaas-config: ""                       # env: KAFKA_SASL_JAAS_CONFIG
+    bootstrap-servers: pkc-921jm.us-east-2.aws.confluent.cloud:9092          # env: KAFKA_BOOTSTRAP_SERVERS
+    transactions-topic: mortgage.account.transactions
+    rules-topic: mortgage.loan.rules
+    group-id: flink-loan-eligibility-group
+    security-protocol: PLAINTEXT
+    sasl-mechanism: ""
+    sasl-jaas-config: ""
 
   postgres:
     url: jdbc:postgresql://localhost:5432/loan_db  # env: POSTGRES_URL

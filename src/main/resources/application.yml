@@ -1,50 +1,22 @@
 app:
   kafka:
-    # Kafka bootstrap servers (broker list)
-    # Confluent Cloud: pkc-xxxxx.us-east-1.aws.confluent.cloud:9092
-    # AWS MSK:         b-1.mycluster.xxx.c2.kafka.us-east-1.amazonaws.com:9092
-    # Local:           localhost:9092
     bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
-
-    # Topic that receives customer transaction events
-    transactions-topic: ${KAFKA_TRANSACTIONS_TOPIC:customer.transactions}
-
-    # Consumer group ID
+    transactions-topic: ${KAFKA_TRANSACTIONS_TOPIC:mortgage.account.transactions}
+    rules-topic: ${KAFKA_RULES_TOPIC:mortgage.loan.rules}
     group-id: ${KAFKA_GROUP_ID:flink-loan-eligibility-group}
-
-    # Security settings (leave blank for plain local Kafka)
-    # Confluent Cloud: SASL_SSL
-    # AWS MSK (IAM):   SASL_SSL
-    # AWS MSK (TLS):   SSL
-    # Local:           PLAINTEXT
     security-protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
-
-    # SASL mechanism
-    # Confluent Cloud: PLAIN
-    # AWS MSK (IAM):   AWS_MSK_IAM
     sasl-mechanism: ${KAFKA_SASL_MECHANISM:}
-
-    # SASL JAAS config string (used for PLAIN / SCRAM auth)
     sasl-jaas-config: ${KAFKA_SASL_JAAS_CONFIG:}
 
   postgres:
-    # JDBC URL for PostgreSQL
-    # Local Docker:  jdbc:postgresql://localhost:5432/loan_db
-    # Neon:          jdbc:postgresql://<host>.neon.tech:5432/<dbname>?sslmode=require
-    # Supabase:      jdbc:postgresql://db.<project>.supabase.co:5432/postgres
     url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/loan_db}
     username: ${POSTGRES_USERNAME:flink}
     password: ${POSTGRES_PASSWORD:flink}
     table-name: ${POSTGRES_TABLE:loan_eligibility}
 
   rules:
-    # Minimum transaction amount for loan eligibility
     threshold-amount: ${RULE_THRESHOLD_AMOUNT:500.0}
-    # Required currency (ISO 4217)
     currency: ${RULE_CURRENCY:GBP}
-    # Required transaction status
     required-transaction-status: ${RULE_REQUIRED_TRANSACTION_STATUS:APPROVED}
-    # Required account status
     required-account-status: ${RULE_REQUIRED_ACCOUNT_STATUS:ACTIVE}
-    # Rule version – stored in every eligibility row for auditability
     loan-rule-version: ${LOAN_RULE_VERSION:v1}
